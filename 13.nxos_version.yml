@@ -1,0 +1,22 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS version check. - httpapi
+
+- name: nxos_version_check.yml 
+  hosts: all
+
+  tasks:
+    - name: GATHER SHOW VERSION
+      nxos_command:
+        commands:
+          - show version
+      register: output
+
+    - name: DUMP OUTPUT TO TERMINAL
+      debug:
+        var: output
+
+    - name: VERIFY OS version
+      assert:
+        that:
+            - "'version 9.2(2)' in output['stdout'][0]" 
+

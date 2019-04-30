@@ -1,0 +1,21 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS version check. - httpapi
+
+- name: nxos_version_check.yml 
+  hosts: spine
+
+  tasks:
+  - name: OOB Network ICMP test module
+    nxos_ping:
+      dest: "{{ item.ip }}"
+      vrf: management
+    with_items:
+      - ip: 10.72.86.1
+      - ip: 10.72.86.4
+      - ip: 10.72.86.7
+      - ip: 10.72.86.21
+      - ip: 10.72.86.43
+      - ip: 10.72.86.44
+      - ip: 10.72.78.129
+      - ip: 10.72.78.253
+

@@ -1,5 +1,8 @@
 # Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
 # ansible for the NXOS SwitchPort factory config.
+# Note
+# Test env : Tested against NXOS 9.2(2), Ansible 2.7
+# Must be :  feature ssh,nxapi must be enable for ansible connection by HTTPAPI and feature ssh,nxapi,privilege must be enable for ansible connection by network_cli.
 
 - name: nxos_ntp.yml 
   hosts: all 
@@ -23,4 +26,4 @@
       changed_when: True
 
 
-# reference url - https://docs.ansible.com/ansible/latest/modules/nxos_ip_interface_module.html#nxos-ip-interface-module
+# reference url - https://docs.ansible.com/ansible/latest/modules/nxos_ntp_module.html#notes

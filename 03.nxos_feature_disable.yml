@@ -1,5 +1,8 @@
 # Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
 # ansible for the NXOS feature disable.
+# Note
+# Test env : Tested against NXOS 9.2(2), Ansible 2.7
+# Must be :  feature ssh,nxapi must be enable for ansible connection by HTTPAPI and feature ssh,nxapi,privilege must be enable for ansible connection by network_cli.
 
 - name: nxos_feature_disable.yml 
   hosts: all 

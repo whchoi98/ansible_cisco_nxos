@@ -1,0 +1,71 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS VLAN create.
+
+- name: nxos_present_vlan.yml 
+  hosts: all 
+  connection: local
+
+  vars:
+    nxos_provider:
+      transport: nxapi      
+      host: "{{ inventory_hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      ssh_keyfile: "{{ ssh_private_key }}"
+      use_ssl: yes
+      validate_certs: no
+   
+    nxos_ssh:
+      host: "{{ inventory_hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      ssh_keyfile: "{{ ssh_private_key }}"
+    
+    nxos_nxapi:
+      transport: nxapi      
+      host: "{{ inventory_hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      ssh_keyfile: "{{ ssh_private_key }}"
+      use_ssl: yes
+      validate_certs: no
+  tasks:
+
+    - name: CREATE USING RANGE
+      nxos_vlan:
+        vlan_range: 10-20
+        state: present
+        provider: "{{ nxos_provider }}"
+
+    - name: CREATE VLANS AND ASSIGN A NAME, USING VLAN_ID
+      nxos_vlan:
+        vlan_id: "{{ item.vlan_id }}"
+        name: "{{ item.name }} "
+        state: present
+        provider: "{{ nxos_provider }}"
+      with_items:
+        - vlan_id: 21
+          name: mercury
+        - vlan_id: 22
+          name: venus
+        - vlan_id: 23
+          name: earth
+        - vlan_id: 24
+          name: mars
+        - vlan_id: 25
+          name: jupiter
+        - vlan_id: 26
+          name: saturn
+        - vlan_id: 27
+          name: uranus
+        - vlan_id: 28
+          name: neptune
+
+    - name: Saving running conf for changed targets
+      nxos_command:
+        provider: "{{ nxos_ssh }}"
+        commands: copy running-config startup-config
+      changed_when: True
+
+#  Reference Site : https://docs.ansible.com/ansible/latest/modules/nxos_vlan_module.html#nxos-vlan-module
+

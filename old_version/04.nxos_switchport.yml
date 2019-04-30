@@ -1,0 +1,67 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS SwitchPort config.
+
+- name: nxos_switchport.yml 
+  hosts: all 
+  connection: local
+
+  vars:
+    nxos_provider:
+      transport: nxapi      
+      host: "{{ inventory_hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      ssh_keyfile: "{{ ssh_private_key }}"
+      use_ssl: yes
+      validate_certs: no
+   
+    nxos_ssh:
+      host: "{{ inventory_hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      ssh_keyfile: "{{ ssh_private_key }}"
+    
+    nxos_nxapi:
+      transport: nxapi      
+      host: "{{ inventory_hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      ssh_keyfile: "{{ ssh_private_key }}"
+      use_ssl: yes
+      validate_certs: no
+
+  tasks:
+    - name: Ensure Ethernetport is in its default switchport state
+      nxos_switchport:
+        provider: "{{ nxos_provider }}"
+        interface: eth1/26
+        state: unconfigured
+
+    - name: Ensure Ethernetport is configured for access vlan 20
+      nxos_switchport:
+        provider: "{{ nxos_provider }}"
+        interface: "{{ item.interface }}"
+        mode: access
+        access_vlan: 20
+      with_items:
+        - interface: Ethernet1/21
+        - interface: Ethernet1/22
+        - interface: Ethernet1/23
+        - interface: Ethernet1/24
+
+    - name: Ensure Ethernetport is configurded for trunk vlans
+      nxos_switchport:
+        provider: "{{ nxos_provider }}"
+        interface: "{{ item.interface }}"
+        mode: trunk
+        trunk_allowed_vlans: 21-23,24
+      with_items:
+        - interface: Ethernet1/25
+
+    - name: Saving running conf for changed targets
+      nxos_command:
+        provider: "{{ nxos_ssh }}"
+        commands: copy run start
+      changed_when: True
+
+# reference url - https://docs.ansible.com/ansible/latest/modules/nxos_switchport_module.html#nxos-switchport-module

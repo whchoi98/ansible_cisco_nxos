@@ -1,0 +1,142 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS feature disable.
+
+- name: nxos_feature_disable.yml 
+  hosts: all 
+  connection: httpapi
+
+  vars:
+      
+    l2_feature:
+      - lacp
+      - lldp           
+      - vpc 
+      - vn-segment-vlan-based
+
+
+    l3_feature:
+      - interface-vlan
+      - ospf
+      - eigrp
+      - bgp
+      - pim
+      - pbr
+      - hsrp
+      - vrrp
+      - bfd
+
+    mgmt_feature:
+      - sftp-server
+      - scp-server
+      - ssh
+      - nxapi
+
+    apiv_feature:
+      - bash-shell
+      - vmtracker
+      - container-tracker  
+
+  tasks:
+    - name: Ensure L2 feature is disabled
+      nxos_feature:
+        feature: "{{ item }}"
+        state: disabled
+        host: "{{ inventory_hostname }}"
+      with_items: "{{ l2_feature }}"
+
+    - name: Ensure L3 feature is disabled
+      nxos_feature:
+        feature: "{{ item }}"
+        state: disabled
+        host: "{{ inventory_hostname }}"
+      with_items: "{{ l3_feature }}"    
+
+    - name: API_virtual feature is disabled
+      nxos_feature:
+        feature: "{{ item }}"
+        state: disabled
+        host: "{{ inventory_hostname }}"
+      with_items: "{{ apiv_feature }}" 
+
+    - name: Saving running conf for changed targets
+      nxos_command:
+        commands: copy running-config startup-config
+      changed_when: True
+
+#    - name: Mgmt feature is enabled
+#      nxos_feature:
+#        provider: "{{ nxos_ssh }}"
+#        feature: "{{ item }}"
+#        state: enabled
+#        host: "{{ inventory_hostname }}"
+#      with_items: "{{ mgmt_feature }}" 
+
+#  Reference Site : https://docs.ansible.com/ansible/latest/modules/nxos_feature_module.html#nxos-feature-module
+#  Cisco Nexus Switch - feature list
+#  analytics               Enable/Disable Analytics!!!
+#  bash-shell              Enable/Disable bash-shell
+#  bfd                     Bfd
+#  bgp                     Enable/Disable Border Gateway Protocol (BGP)
+#  catena                  Enable/Disable catena
+#  container-tracker       Enable/Disable NXOS Container Tracker
+#  dhcp                    Enable/Disable DHCP Manager
+#  dot1x                   Enable/Disable dot1x
+#  eigrp                   Enable/Disable Enhanced Interior Gateway Routing Protocol (EIGRP)
+#  evb                     Enable/Disable Edge Virtual Bridge (EVB)
+#  evmed                   Enable/Disable Generic event detectors
+#  fabric                  Enable/Disable Fabric Services
+#  grpc                    Enable/Disable grpc Services
+#  hsrp                    Enable/Disable Hot Standby Router Protocol (HSRP)
+#  icam                    Enable/Disable icam
+#  imp                     Enable/Disable IMP
+#  interface-vlan          Enable/Disable interface vlan
+#  isis                    Enable/Disable IS-IS Unicast Routing Protocol (IS-IS)
+#  itd                     Enable/Disable ITD
+#  lacp                    Enable/Disable LACP
+#  ldap                    Enable/Disable ldap
+#  lldp                    Enable/Disable LLDP
+#  mpls                    Enable/Disable MPLS Services
+#  msdp                    Enable/Disable Multicast Source Discovery Protocol (MSDP)
+#  nat                     Enable/Disable NAT
+#  netconf                 Enable/Disable netconf Services
+#  netflow                 Enable/Disable NetFlow
+#  ngmvpn                  Enable/Disable EVPN/MVPN features
+#  ngoam                   Enable/Disable ngoam
+#  ntp                     Enable/Disable NTP
+#  nv                      Enable/Disable VxLAN
+#  nxapi                   Enable/Disable nxapi
+#  nxdb                    Enable/Disable nxdb
+#  nxsdk                   Enable/Disable nxsdk Services
+#  openflow                Enable/Disable OpenFlow agent
+#  ospf                    Enable/Disable Open Shortest Path First Protocol (OSPF)
+#  ospfv3                  Enable/Disable Open Shortest Path First Version 3 Protocol (OSPFv3)
+#  password                Credential(s) for the user(s)/device(s)
+#  pbr                     Enable/Disable Policy Based Routing(PBR)
+#  pim                     Enable/Disable Protocol Independent Multicast (PIM)
+#  pim6                    Enable/Disable Protocol Independent Multicast(PIM) for IPv6
+#  plb                     Enable/Disable Pervasive Load Balancing feature
+#  port-security           Enable/Disable port-security
+#  private-vlan            Enable/Disable private-vlan
+#  privilege               Enable/Disable IOS type privilege level support
+#  ptp                     Enable/Disable PTP
+#  restconf                Enable/Disable restconf Services
+#  rip                     Enable/Disable Routing Information Protocol (RIP)
+#  scheduler               Enable/Disable scheduler
+#  scp-server              Enable/Disable SCP server
+#  sflow                   Enable/Disable sFlow agent
+#  sftp-server             Enable/Disable SFTP server
+#  signature-verification  Enable image signature verification
+#  sla                     Enable/Disable SLA
+#  smart-channel           Enable/Disable smart-channel
+#  ssh                     Enable/Disable ssh
+#  tacacs+                 Enable/Disable tacacs+
+#  telemetry               Enable/Disable Telemetry
+#  telnet                  Enable/Disable telnet
+#  tunnel                  Enable/Disable Tunnel Manager
+#  udld                    Enable/Disable UDLD
+#  vmtracker               Enable/Disable VM Tracker feature
+#  vn-segment-vlan-based   Enable/Disable VLAN based VN segment
+#  vpc                     Enable/Disable VPC (Virtual Port Channel)
+#  vrrp                    Enable/Disable Virtual Router Redundancy Protocol (VRRP)
+#  vrrpv3                  Enable/Disable Virtual Router Redundancy Protocol (VRRP) version 3
+#  vtp                     Enable/Disable VTP

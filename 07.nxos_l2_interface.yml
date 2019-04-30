@@ -1,0 +1,39 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS l2 interface config.
+
+- name: nxos_l2_interface.yml 
+  hosts: all 
+  connection: httpapi
+
+  tasks:
+    - name: Ensure Ethernetport is in its default switchport state
+      nxos_l2_interface:
+        name: Ethernet1/21
+        state: unconfigured
+
+    - name: Ensure Eth1/22 is configured for access vlan21
+      nxos_l2_interface:
+        name: Ethernet1/22
+        mode: access
+        access_vlan: 22
+
+    - name: Ensure Eth1/23-24 only has vlans 25-26 as trunk vlans
+      nxos_l2_interface:
+        name: "{{ item.interface }}"
+      with_items:
+        - interface : Ethernet1/23
+        - interface : Ethernet1/24
+
+    - name: Agg configure interface for access_vlan with agg
+      nxos_l2_interface:
+        aggregate:
+          - { name: "Ethernet1/25", access_vlan: 27 }
+        mode: access
+
+    - name: Saving running conf for changed targets
+      nxos_command:
+        commands: copy running-config startup-config
+      changed_when: True
+
+
+# reference url - https://docs.ansible.com/ansible/latest/modules/nxos_l2_interface_module.html#nxos-l2-interface-module

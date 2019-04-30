@@ -1,0 +1,26 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS SwitchPort factory config.
+
+- name: nxos_ntp.yml 
+  hosts: all 
+  connection: httpapi
+
+  tasks:
+    - name: NTP configuration 
+      nxos_ntp:
+        server: 10.72.86.7
+        vrf_name: management
+        source_int: mgmt0
+
+    - name: Timezone config for the Korea Time 
+      nxos_config:
+        lines: 
+          - clock timezone KST 9 0
+
+    - name: Saving running conf for changed targets
+      nxos_command:
+        commands: copy running-config startup-config
+      changed_when: True
+
+
+# reference url - https://docs.ansible.com/ansible/latest/modules/nxos_ip_interface_module.html#nxos-ip-interface-module

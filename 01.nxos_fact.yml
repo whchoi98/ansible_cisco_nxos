@@ -1,0 +1,17 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS fact check. - nxapi , ssh
+
+- name: nxos_fact.yml 
+  hosts: all 
+
+  tasks:
+    - name: nxos_facts gather config
+      nxos_facts:
+        gather_subset:
+          - config
+      register: output
+    - debug: var=output
+
+
+
+#  Reference Site : https://docs.ansible.com/ansible/latest/modules/nxos_facts_module.html#examples

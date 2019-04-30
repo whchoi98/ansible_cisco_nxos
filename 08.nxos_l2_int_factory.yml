@@ -1,0 +1,27 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS L2 Interface factory config.
+
+- name: nxos_l2_interface.yml 
+  hosts: all 
+  connection: httpapi
+
+  tasks:
+    - name: Ensure Ethernetport is in its default switchport state
+      nxos_l2_interface:
+        name: "{{ item.interface }}"
+        state: unconfigured
+      with_items:
+        - interface : Ethernet1/21
+        - interface : Ethernet1/22
+        - interface : Ethernet1/23
+        - interface : Ethernet1/24
+        - interface : Ethernet1/25
+        - interface : Ethernet1/26
+
+    - name: Saving running conf for changed targets
+      nxos_command:
+        commands: copy running-config startup-config
+      changed_when: True
+
+
+# reference url - https://docs.ansible.com/ansible/latest/modules/nxos_l2_interface_module.html#nxos-l2-interface-module

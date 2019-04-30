@@ -1,0 +1,38 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS SwitchPort config.
+
+- name: nxos_switchport.yml 
+  hosts: all 
+  connection: httpapi
+
+  tasks:
+    - name: Ensure Ethernetport is in its default switchport state
+      nxos_switchport:
+        interface: eth1/26
+        state: unconfigured
+
+    - name: Ensure Ethernetport is configured for access vlan 20
+      nxos_switchport:
+        interface: "{{ item.interface }}"
+        mode: access
+        access_vlan: 20
+      with_items:
+        - interface: Ethernet1/21
+        - interface: Ethernet1/22
+        - interface: Ethernet1/23
+        - interface: Ethernet1/24
+
+    - name: Ensure Ethernetport is configurded for trunk vlans
+      nxos_switchport:
+        interface: "{{ item.interface }}"
+        mode: trunk
+        trunk_allowed_vlans: 21-23,24
+      with_items:
+        - interface: Ethernet1/25
+
+    - name: Saving running conf for changed targets
+      nxos_command:
+        commands: copy run start
+      changed_when: True
+
+# reference url - https://docs.ansible.com/ansible/latest/modules/nxos_switchport_module.html#nxos-switchport-module

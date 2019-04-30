@@ -1,0 +1,26 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS SwitchPort factory config.
+
+- name: nxos_switchport_factory.yml 
+  hosts: all 
+  connection: httpapi
+
+  tasks:
+    - name: Ensure Ethernetport is in its default switchport state
+      nxos_switchport:
+        interface: "{{ item.interface }}"
+        state: unconfigured
+      with_items:
+        - interface: Ethernet1/21
+        - interface: Ethernet1/22
+        - interface: Ethernet1/23
+        - interface: Ethernet1/24
+        - interface: Ethernet1/25
+        - interface: Ethernet1/26
+
+    - name: Saving running conf for changed targets
+      nxos_command:
+        commands: copy running-config startup-config
+      changed_when: True
+
+# reference url - https://docs.ansible.com/ansible/latest/modules/nxos_switchport_module.html#nxos-switchport-module

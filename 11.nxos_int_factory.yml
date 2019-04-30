@@ -1,0 +1,20 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS interface factory config.
+
+- name: nxos_interface_factory.yml 
+  hosts: all 
+  connection: httpapi
+
+  tasks:
+    - name: interface setting for the L3 Interface 
+      nxos_config:
+        lines: 
+          - default interface ethernet 1/21 -25
+
+    - name: Saving running conf for changed targets
+      nxos_command:
+        commands: copy running-config startup-config
+      changed_when: True
+
+
+# reference url - https://docs.ansible.com/ansible/latest/modules/nxos_ip_interface_module.html#nxos-ip-interface-module

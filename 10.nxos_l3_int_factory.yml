@@ -1,0 +1,45 @@
+# Create date : 2019-04-15 / by Woo Hyung Choi / whchoi@cisco.com, whchoi98@gmail.com
+# ansible for the NXOS l3 interface factory config.
+
+- name: nxos_l3_interface_factory.yml 
+  hosts: all 
+  connection: httpapi
+
+  tasks:
+    - name: interface setting for the L3 Interface 
+      nxos_config:
+        lines: 
+          - interface ethernet 1/21 -25
+          - no switchport
+
+    - name: Set interface IPv4 address
+      nxos_l3_interface:
+        name: Ethernet1/21
+        ipv4: 192.168.1.1/24
+        state: absent
+
+    - name: Set IP addresses on aggregate
+      nxos_l3_interface:
+        aggregate:
+          - { name: Ethernet1/22, ipv4: 192.168.2.1/24 }
+          - { name: Ethernet1/23, ipv4: 192.168.3.1/24 }
+        state: absent
+
+    - name: Set IP addresses by var
+      nxos_l3_interface:
+        name: "{{ item.interface_id }}"
+        ipv4: "{{ item.ipv4 }}"
+        state: absent
+      with_items:
+          - interface_id: Ethernet1/24
+            ipv4: 192.168.4.1/24
+          - interface_id: Ethernet1/25
+            ipv4: 192.168.5.1/24
+
+    - name: Saving running conf for changed targets
+      nxos_command:
+        commands: copy running-config startup-config
+      changed_when: True
+
+
+# reference url - https://docs.ansible.com/ansible/latest/modules/nxos_ip_interface_module.html#nxos-ip-interface-module

@@ -1,0 +1,22 @@
+[all:vars]
+#version 2.5
+ansible_become=yes
+ansible_become_method=enable
+ansible_network_os=nxos
+ansible_connection=httpapi
+#ansible_connection=network_cli
+ansible_httpapi_port=443
+ansible_httpapi_use_ssl=yes
+ansible_httpapi_validate_certs=no
+ansible_user=ansible
+ansible_password=1234Qwer
+
+[spine]
+10.72.86.143 
+10.72.86.144
+
+[leaf]
+10.72.86.145
+10.72.86.146
+10.72.86.147
+10.72.86.148

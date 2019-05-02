@@ -1,7 +1,5 @@
 <h1>  Cisco Nexus OS Ansible Module <h1>
 
-<h5>  문서 업데이트 : 2019-05-02 <h5>
-
 <h3>  1. Nexus Ansible Module <h3>
 
 <h4> 현재 네트워크 모듈 가운데 Cisco ACI와 함께 가장 많은 모듈을 제공하고 있으며, 해당 모듈을 통해서 다양한 방법의 모니터링과 구성이 가능하다.<h4>
@@ -96,6 +94,7 @@ nxos_vxlan_vtep_vni|Creates a Virtual Network Identifier member (VNI)|
 ---
 
 <h3> 2. Reference Site <h3>
+
 <h4>
 [Ansible 2.7 공식 홈페이지](https://docs.ansible.com/ansible/latest/modules/list_of_network_modules.html#nxos)
 

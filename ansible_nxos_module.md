@@ -1,10 +1,7 @@
 
 <h1>  Cisco Nexus OS Ansible Module <h1>
 
-<h4>  문서 업데이트 : 2019-05-02
-
----
-
+<h4>  문서 업데이트 : 2019-05-02 <h4>
 
 <h3>  1. Nexus Ansible Module <h3>
 

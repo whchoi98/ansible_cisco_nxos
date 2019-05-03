@@ -10,13 +10,26 @@ ansible_httpapi_use_ssl=yes
 ansible_httpapi_validate_certs=no
 ansible_user=ansible
 ansible_password=1234Qwer
+#ansible_ssh_pass=1234Qwer
+
+
+[oob]
+dcoob ansible_host=10.72.86.1
+
+[n5k]
+n5k-a ansible_host=10.72.86.2
+n5k-b ansible_host=10.72.86.3 
+
+[n6k]
+n6k-a ansible_host=10.72.86.141
+n6k-b ansible_host=10.72.86.142
 
 [spine]
-10.72.86.143 
-10.72.86.144
+NXOS-SPINE-1001 ansible_host=10.72.86.143 ansible_network_os=nxos ansible_user=admin ansible_password=1234Qwer
+NXOS-SPINE-1002 ansible_host=10.72.86.144 ansible_network_os=nxos ansible_user=admin ansible_password=1234Qwer
 
 [leaf]
-10.72.86.145
-10.72.86.146
-10.72.86.147
-10.72.86.148
+NXOS-LEAF-1003  ansible_host=10.72.86.145
+NXOS-LEAF-1004  ansible_host=10.72.86.146
+NXOS-LEAF-1005  ansible_host=10.72.86.147
+NXOS-LEAF-1006  ansible_host=10.72.86.148
